@@ -1,8 +1,7 @@
-javascript
 /* =======================================================
-   ZENITH OS — PWA SERVICE WORKER (OFFLINE SUPPORT)
+  STUDYARC — PWA SERVICE WORKER (OFFLINE SUPPORT)
    ======================================================= */
-const CACHE_NAME = 'zenith-os-v1';
+const CACHE_NAME = 'studyarc-v4';
 const ASSETS = [
   './',
   './index.html',
@@ -10,10 +9,11 @@ const ASSETS = [
   './css/style.css',
   './js/config.js',
   './js/state.js',
+  './js/supabase.js',
   './js/vault.js',
   './js/modules.js',
   './js/analytics.js',
-  './js/calendar.js',
+  './js/calender.js',
   './js/app.js'
 ];
 

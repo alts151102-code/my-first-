@@ -3,19 +3,20 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ZENITH OS — Focus & Universal Exam Command Desk</title>
+  <title>StudyArc — Student Study Workspace</title>
 
   <!-- PWA Manifest & Meta Tags -->
   <link rel="manifest" href="manifest.json" />
-  <meta name="theme-color" content="#141210" />
+  <meta name="theme-color" content="#D2ECF9" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="Zenith OS" />
+  <meta name="apple-mobile-web-app-title" content="StudyArc" />
 
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Chart.js CDN -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <!-- Stylesheet -->
   <link rel="stylesheet" href="css/style.css" />
 
@@ -25,20 +26,20 @@
       theme: {
         extend: {
           colors: {
-            canvas: '#FAF8F5',
-            surface: '#FFFFFF',
-            bordercol: '#EAE5DC',
-            darkcanvas: '#0D0C0B',
-            darksurface: '#171514',
-            darkborder: '#292523',
+            canvas: '#D2ECF9',
+            surface: '#F7FCFF',
+            bordercol: '#B8D7E5',
+            darkcanvas: '#101C25',
+            darksurface: '#192A34',
+            darkborder: '#2C4552',
             ink: {
-              900: '#141210',
-              800: '#24201C',
-              700: '#403A33',
-              500: '#787064',
-              400: '#A2998C',
-              200: '#E6E1D7',
-              100: '#F3EFE9'
+              900: '#17313D',
+              800: '#294756',
+              700: '#456270',
+              500: '#637C89',
+              400: '#8196A0',
+              200: '#D6E6ED',
+              100: '#EEF7FA'
             },
             mint: {
               50: '#EDFAF3',
@@ -85,21 +86,21 @@
       <div class="flex items-center gap-3">
         <!-- Brand SVG Logo -->
         <svg class="w-10 h-10 shadow-sm" viewBox="0 0 48 48" fill="none">
-          <rect width="48" height="48" rx="14" fill="#141210" class="dark:fill-surface" />
+          <rect width="48" height="48" rx="14" fill="#17313D" class="dark:fill-surface" />
           <path d="M24 8L38 34H10L24 8Z" stroke="url(#zenith-glow)" stroke-width="3" stroke-linejoin="round" />
           <path d="M24 16L32 32H16L24 16Z" fill="url(#zenith-glow)" opacity="0.85" />
           <circle cx="24" cy="24" r="3.5" fill="#FFFFFF" class="dark:fill-ink-900" />
           <defs>
             <linearGradient id="zenith-glow" x1="10" y1="8" x2="38" y2="34" gradientUnits="userSpaceOnUse">
-              <stop stop-color="#10B981" />
-              <stop offset="0.5" stop-color="#06B6D4" />
-              <stop offset="1" stop-color="#6366F1" />
+              <stop stop-color="#347F9E" />
+              <stop offset="0.5" stop-color="#5DB8D2" />
+              <stop offset="1" stop-color="#E69AB2" />
             </linearGradient>
           </defs>
         </svg>
         <div>
-          <span class="text-sm font-bold tracking-tight block">ZENITH OS</span>
-          <span class="text-[10px] font-mono text-ink-500 uppercase tracking-widest block">EXAM RECOVERY DESK</span>
+          <span class="text-sm font-bold tracking-tight block">StudyArc</span>
+          <span class="text-[10px] font-mono text-ink-500 uppercase tracking-widest block">PERSONAL STUDY DESK</span>
         </div>
       </div>
 
@@ -121,8 +122,11 @@
         </a>
 
         <!-- Sign In Trigger -->
-        <button onclick="openModal('modal-login')" class="px-4 py-1.5 rounded-lg bg-ink-900 dark:bg-surface text-surface dark:text-ink-900 text-xs font-semibold hover:opacity-90 transition">
-          Sign In
+        <button onclick="setAuthMode('signin'); openModal('modal-login')" class="px-4 py-1.5 rounded-lg bg-ink-900 dark:bg-surface text-surface dark:text-ink-900 text-xs font-semibold hover:opacity-90 transition">
+            Log In
+        </button>
+        <button onclick="setAuthMode('signup'); openModal('modal-login')" class="px-4 py-1.5 rounded-lg border bordercol dark:border-darkborder text-xs font-semibold hover:bg-ink-100 dark:hover:bg-darksurface transition">
+          Sign Up
         </button>
       </div>
     </div>
@@ -130,46 +134,71 @@
     <!-- Center Hero with 3D Wireframe Canvas -->
     <div class="max-w-6xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-8 items-center my-8">
       <div class="lg:col-span-7 space-y-6">
-        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-mint-50 dark:bg-mint-950/40 border border-mint-200 dark:border-mint-800 text-mint-800 dark:text-mint-200 text-xs font-mono">
-          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-          <span>Universal Protocol for Competitive Exams</span>
+        <div class="inline-flex items-center gap-2 rounded-full border border-sky-300 bg-white/70 px-3 py-1 text-xs font-mono text-sky-900 dark:border-sky-800 dark:bg-sky-950/40 dark:text-sky-200">
+          <span class="h-2 w-2 rounded-full bg-sky-600"></span>
+          <span>YOUR STUDY COMMAND DESK</span>
         </div>
 
-        <h1 class="text-4xl sm:text-6xl font-serif font-bold tracking-tight leading-tight">
-          Eliminate mark leakage.<br>
-          <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 via-teal-500 to-indigo-600">Reclaim total test command.</span>
+        <h1 class="max-w-3xl font-serif text-4xl font-bold leading-tight sm:text-6xl">
+          StudyArc<br>
+          <span class="bg-gradient-to-r from-sky-800 via-cyan-700 to-rose-600 bg-clip-text text-transparent dark:from-sky-200 dark:via-cyan-200 dark:to-rose-200">Made by students, for students.</span>
         </h1>
 
-        <p class="text-sm sm:text-base text-ink-500 dark:text-ink-400 leading-relaxed max-w-xl">
-          An offline command protocol designed to eliminate calculation penalties, schedule 90-minute backlog sprints, and organize problem units across multiple modules with pure line graph trajectories.
+        <p class="max-w-xl text-sm leading-relaxed text-ink-700 dark:text-ink-200 sm:text-base">
+          Keep modules, exam dates, test results, and focus sessions in one personal workspace. See what needs attention, plan a realistic day, and follow your progress over time.
         </p>
 
-        <div class="flex items-center gap-4 pt-2">
-          <button onclick="startOnboardingWizard()" class="px-6 py-3 rounded-xl bg-ink-900 dark:bg-surface text-surface dark:text-ink-900 font-bold text-sm shadow-md flex items-center gap-2 hover:opacity-90 transition">
-            <span>Start Free Protocol</span>
-            <span>&rarr;</span>
+        <div class="flex flex-wrap items-center gap-3 pt-2">
+          <button onclick="setAuthMode('signup'); openModal('modal-login')" class="flex items-center gap-2 rounded-lg bg-ink-900 px-5 py-3 text-sm font-bold text-white shadow-md transition hover:opacity-90 dark:bg-surface dark:text-ink-900">
+            <span>Create your account</span>
+            <span aria-hidden="true">&rarr;</span>
           </button>
-          <button onclick="document.getElementById('creator-section').scrollIntoView({ behavior: 'smooth' })" class="px-5 py-3 rounded-xl border bordercol dark:border-darkborder hover:bg-ink-100 dark:hover:bg-darksurface text-xs font-mono transition">
-            Founder Background
+          <button onclick="document.getElementById('intro-capabilities').scrollIntoView({ behavior: 'smooth' })" class="rounded-lg border bordercol bg-white/50 px-4 py-3 text-xs font-semibold transition hover:bg-white dark:bg-white/5 dark:hover:bg-white/10">
+            Explore the workspace
           </button>
         </div>
       </div>
 
-      <div class="lg:col-span-5 relative flex items-center justify-center">
-        <canvas id="threeDCanvas" class="w-full h-80 sm:h-96 rounded-2xl cursor-grab active:cursor-grabbing"></canvas>
-        <span class="absolute bottom-2 text-[10px] font-mono text-ink-400">Interactive 3D Prism • Click and drag</span>
+      <div class="lg:col-span-5">
+        <section class="overflow-hidden rounded-xl border border-sky-300 bg-surface shadow-lg dark:border-sky-900 dark:bg-darksurface">
+          <div class="flex items-center justify-between border-b bordercol px-5 py-4 dark:border-darkborder">
+            <div><p class="font-mono text-[10px] uppercase tracking-widest text-sky-800 dark:text-sky-200">EXAMPLE WORKSPACE</p><h2 class="mt-1 text-sm font-bold">A clearer view of your week</h2></div>
+            <span class="rounded-full bg-sky-100 px-2.5 py-1 text-[10px] font-mono font-bold text-sky-900 dark:bg-sky-950 dark:text-sky-100">STUDYARC</span>
+          </div>
+          <div class="space-y-4 p-5">
+            <div class="flex items-start justify-between gap-4 border-b bordercol pb-3 dark:border-darkborder">
+              <div><p class="font-mono text-[10px] uppercase text-ink-500">UP NEXT</p><p class="mt-1 text-sm font-bold">Physics · practice set</p><p class="mt-1 text-[11px] text-ink-500">Chapter progress and goals in one place</p></div>
+              <span class="font-mono text-xs font-semibold text-sky-800 dark:text-sky-200">TODAY</span>
+            </div>
+            <div class="flex items-start justify-between gap-4 border-b bordercol pb-3 dark:border-darkborder">
+              <div><p class="font-mono text-[10px] uppercase text-ink-500">EXAM MAP</p><p class="mt-1 text-sm font-bold">Your dates, all year</p><p class="mt-1 text-[11px] text-ink-500">Daily plans and upcoming exams</p></div>
+              <span class="font-mono text-xs font-semibold text-rose-700 dark:text-rose-200">PLAN</span>
+            </div>
+            <div class="flex items-center justify-between gap-3">
+              <p class="text-xs leading-relaxed text-ink-600 dark:text-ink-300">Build a workspace around your subjects, exam goals, and schedule.</p>
+              <button onclick="setAuthMode('signup'); openModal('modal-login')" class="shrink-0 rounded-lg bg-ink-900 px-3 py-2 text-xs font-semibold text-white dark:bg-surface dark:text-ink-900">Join StudyArc</button>
+            </div>
+          </div>
+        </section>
       </div>
     </div>
 
-    <!-- About Creator: Tirth Solanki, 15 -->
-    <div id="creator-section" class="max-w-6xl mx-auto w-full pt-8 border-t bordercol dark:border-darkborder grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+      <div id="intro-capabilities" class="mx-auto grid w-full max-w-6xl grid-cols-1 gap-3 border-t bordercol pt-6 sm:grid-cols-2 lg:grid-cols-4">
+        <article class="border-l-2 border-sky-700 pl-4 dark:border-sky-300"><p class="font-mono text-[10px] text-ink-500">01 / ORGANIZE</p><h2 class="mt-1 text-sm font-bold">Module tracker</h2><p class="mt-1 text-xs text-ink-600 dark:text-ink-300">Break subjects into chapters and practice units.</p></article>
+        <article class="border-l-2 border-cyan-700 pl-4 dark:border-cyan-300"><p class="font-mono text-[10px] text-ink-500">02 / REVIEW</p><h2 class="mt-1 text-sm font-bold">Mark analysis</h2><p class="mt-1 text-xs text-ink-600 dark:text-ink-300">Compare mock scores, accuracy, and penalties.</p></article>
+        <article class="border-l-2 border-rose-600 pl-4 dark:border-rose-300"><p class="font-mono text-[10px] text-ink-500">03 / PLAN</p><h2 class="mt-1 text-sm font-bold">Exam calendar</h2><p class="mt-1 text-xs text-ink-600 dark:text-ink-300">Map annual exam dates and daily study blocks.</p></article>
+        <article class="border-l-2 border-indigo-700 pl-4 dark:border-indigo-300"><p class="font-mono text-[10px] text-ink-500">04 / FOCUS</p><h2 class="mt-1 text-sm font-bold">Pomodoro sessions</h2><p class="mt-1 text-xs text-ink-600 dark:text-ink-300">Run a focused block, take a break, repeat.</p></article>
+      </div>
+
+    <!-- About Creator -->
+    <div id="creator-section" class="mx-auto grid w-full max-w-6xl grid-cols-1 items-center gap-6 border-t bordercol pt-6 md:grid-cols-12">
       <div class="md:col-span-4 flex items-center gap-4">
-        <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-emerald-500 via-teal-500 to-indigo-600 flex items-center justify-center text-white text-xl font-bold shadow-md">
+        <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-sky-700 via-cyan-500 to-rose-400 flex items-center justify-center text-white text-xl font-bold shadow-md">
           TS
         </div>
         <div>
-          <h3 class="font-bold text-sm">Tirth Solanki, 15</h3>
-          <p class="text-xs text-ink-500 font-mono">Architect & Lead Builder</p>
+          <h3 class="font-bold text-sm">Built for students who want a clearer plan</h3>
+          <p class="text-xs text-ink-500 font-mono">A practical study workspace</p>
           <a href="https://www.instagram.com/preg.tirth.nant?srtk=MXBxbnd4cmxoemZ2aA==" target="_blank" rel="noopener noreferrer" class="text-[11px] text-pink-600 hover:underline font-mono">
             @preg.tirth.nant &rarr;
           </a>
@@ -177,7 +206,7 @@
       </div>
       <div class="md:col-span-8">
         <p class="text-xs text-ink-600 dark:text-ink-300 leading-relaxed italic">
-          "I engineered Zenith OS at 15 to address systemic test score erosion: negative mark leaks, untracked problem quotas, and lost focus. Built to protect accuracy across every major syllabus."
+          "Track the work, notice weak areas, and make the next session easier to choose. Keep your exam plans and progress together, then adjust as your goals change."
         </p>
       </div>
     </div>
@@ -192,20 +221,20 @@
         
         <div class="flex items-center gap-3">
           <svg class="w-8 h-8" viewBox="0 0 48 48" fill="none">
-            <rect width="48" height="48" rx="14" fill="#141210" class="dark:fill-surface" />
+            <rect width="48" height="48" rx="14" fill="#17313D" class="dark:fill-surface" />
             <path d="M24 8L38 34H10L24 8Z" stroke="url(#hdr-glow)" stroke-width="3" stroke-linejoin="round" />
             <path d="M24 16L32 32H16L24 16Z" fill="url(#hdr-glow)" opacity="0.85" />
             <defs>
               <linearGradient id="hdr-glow" x1="10" y1="8" x2="38" y2="34" gradientUnits="userSpaceOnUse">
-                <stop stop-color="#10B981" />
-                <stop offset="0.5" stop-color="#06B6D4" />
-                <stop offset="1" stop-color="#6366F1" />
+                <stop stop-color="#347F9E" />
+                <stop offset="0.5" stop-color="#5DB8D2" />
+                <stop offset="1" stop-color="#E69AB2" />
               </linearGradient>
             </defs>
           </svg>
           <div>
             <div class="flex items-center gap-2">
-              <h1 class="text-sm font-bold tracking-tight">ZENITH OS</h1>
+              <h1 class="text-sm font-bold tracking-tight">StudyArc</h1>
               <span id="role-status-badge" class="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-ink-100 dark:bg-darkcanvas text-ink-700 dark:text-ink-300">
                 Candidate
               </span>
@@ -219,52 +248,40 @@
           <button id="pwa-install-btn-nav" onclick="triggerPwaInstall()" class="hidden px-2.5 py-1 text-xs font-mono font-bold rounded border border-indigo-200 dark:border-indigo-900 bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 items-center gap-1">
             📲 <span class="hidden md:inline">Install</span>
           </button>
-
-          <a href="https://www.instagram.com/preg.tirth.nant?srtk=MXBxbnd4cmxoemZ2aA==" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1.5 rounded-md border border-pink-200 dark:border-pink-900/40 bg-pink-50 dark:bg-pink-950/30 text-pink-700 dark:text-pink-300 text-xs font-mono">
-            <span class="hidden sm:inline">Follow on Insta</span>
-          </a>
-
-          <button onclick="toggleDarkMode()" class="p-1.5 rounded-md border bordercol dark:border-darkborder text-xs" title="Toggle Theme">
-            <span id="theme-icon-nav">🌙</span>
-          </button>
-
-          <!-- Founder view switcher (visible ONLY to Founder Tirth) -->
-          <div id="founder-toggle-container" class="hidden bg-ink-100 dark:bg-darkcanvas p-0.5 rounded-lg flex items-center text-xs font-mono border bordercol dark:border-darkborder">
-            <button id="view-mode-student" onclick="setDashboardView('student')" class="py-1 px-2 rounded-md bg-surface dark:bg-darksurface font-bold text-[11px]">Workspace</button>
-            <button id="view-mode-founder" onclick="setDashboardView('founder')" class="py-1 px-2 rounded-md text-amber-800 dark:text-amber-300 font-bold hover:bg-amber-100/50 text-[11px] flex items-center gap-1">
-              <span>👑 Founder Desk</span>
-            </button>
-          </div>
-
-          <button onclick="openModal('modal-feedback')" class="px-2.5 py-1 text-xs font-mono rounded-md border bordercol dark:border-darkborder hover:bg-ink-100 dark:hover:bg-darkcanvas">
-            💡 <span class="hidden md:inline">Feedback</span>
-          </button>
-
-          <button onclick="openCave()" class="px-3 py-1.5 text-xs font-mono rounded-md bg-ink-900 dark:bg-surface text-surface dark:text-ink-900 flex items-center gap-1.5">
-            <span>🎧 Cave</span>
-            <kbd class="px-1 py-0.2 rounded bg-ink-700 dark:bg-ink-300 text-[10px] text-ink-200 dark:text-ink-800">F</kbd>
-          </button>
-
-          <button onclick="logOutToLanding()" class="p-1.5 text-ink-400 hover:text-ink-900 dark:hover:text-surface text-xs font-mono" title="Log Out">
-            [Exit]
-          </button>
+          <details id="profile-dropdown" class="relative hidden">
+            <summary class="flex cursor-pointer list-none items-center gap-2 rounded-lg border bordercol dark:border-darkborder bg-surface dark:bg-darksurface px-2 py-1.5 text-xs">
+              <img id="profile-avatar-small" class="hidden h-7 w-7 rounded-full object-cover" alt="Profile picture">
+              <span id="profile-avatar-initial" class="flex h-7 w-7 items-center justify-center rounded-full bg-[#D2ECF9] font-bold text-ink-900">S</span>
+              <span id="profile-menu-name" class="hidden max-w-28 truncate font-semibold sm:inline">Profile</span>
+              <span aria-hidden="true">⌄</span>
+            </summary>
+            <div class="absolute right-0 z-50 mt-2 w-60 rounded-xl border bordercol dark:border-darkborder bg-surface dark:bg-darksurface p-2 shadow-xl">
+              <div class="border-b bordercol dark:border-darkborder px-3 py-2">
+                <p id="profile-menu-real-name" class="truncate text-sm font-bold">Student</p>
+                <p id="profile-menu-email" class="truncate text-[11px] text-ink-500"></p>
+                <p id="profile-menu-username" class="truncate text-[11px] text-ink-500"></p>
+              </div>
+              <button onclick="openProfileSettings(); document.getElementById('profile-dropdown').open = false" class="profile-menu-action">Profile settings</button>
+              <button onclick="openCave(); document.getElementById('profile-dropdown').open = false" class="profile-menu-action">Focus timer</button>
+              <button onclick="switchTab('tab-calendar'); document.getElementById('profile-dropdown').open = false" class="profile-menu-action">Study calendar</button>
+              <button onclick="switchTab('tab-pro'); document.getElementById('profile-dropdown').open = false" class="profile-menu-action">Pro plans</button>
+              <button onclick="toggleDarkMode()" class="profile-menu-action"><span id="theme-menu-label">Switch theme</span></button>
+              <button id="profile-founder-action" onclick="setDashboardView('founder'); document.getElementById('profile-dropdown').open = false" class="profile-menu-action hidden">Founder desk</button>
+              <button onclick="openModal('modal-feedback'); document.getElementById('profile-dropdown').open = false" class="profile-menu-action">Feedback</button>
+              <button onclick="logOutToLanding()" class="profile-menu-action border-t bordercol dark:border-darkborder text-pwred">Log out</button>
+            </div>
+          </details>
         </div>
       </div>
 
       <!-- Navigation Bar -->
       <nav class="flex gap-1 sm:gap-2 overflow-x-auto text-xs font-medium border-t bordercol dark:border-darkborder py-2" id="nav-tabs-bar">
-        <button onclick="switchTab('tab-modules')" class="tab-btn py-1.5 px-3 rounded-md bg-ink-900 dark:bg-surface text-white dark:text-ink-900 font-semibold" data-tab="tab-modules">1. Module Notebooks</button>
-        <button onclick="switchTab('tab-marks')" class="tab-btn py-1.5 px-3 rounded-md text-ink-500 hover:bg-ink-100 dark:hover:bg-darksurface" data-tab="tab-marks">2. Marks & Line Graphs</button>
+        <button onclick="switchTab('tab-modules')" class="tab-btn py-1.5 px-3 rounded-md bg-ink-900 dark:bg-surface text-white dark:text-ink-900 font-semibold" data-tab="tab-modules">1. Module Tracker</button>
+        <button onclick="switchTab('tab-marks')" class="tab-btn py-1.5 px-3 rounded-md text-ink-500 hover:bg-ink-100 dark:hover:bg-darksurface" data-tab="tab-marks">2. Mark Analysis</button>
         <button onclick="switchTab('tab-calendar')" class="tab-btn py-1.5 px-3 rounded-md text-ink-500 hover:bg-ink-100 dark:hover:bg-darksurface" data-tab="tab-calendar">3. Multi-Exam Calendar</button>
         <button onclick="switchTab('tab-backlog')" class="tab-btn py-1.5 px-3 rounded-md text-ink-500 hover:bg-ink-100 dark:hover:bg-darksurface" data-tab="tab-backlog">4. Backlog Protocol</button>
         <button onclick="switchTab('tab-regain')" class="tab-btn py-1.5 px-3 rounded-md text-indigo-700 dark:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-950/40 flex items-center gap-1 font-semibold" data-tab="tab-regain">
-          <span>🛡️ Focus Jail</span>
-        </button>
-        <button onclick="switchTab('tab-pro')" class="tab-btn py-1.5 px-3 rounded-md text-amber-700 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-950/40 flex items-center gap-1 font-semibold" data-tab="tab-pro">
-          <span>⭐ Pro Vault</span>
-        </button>
-        <button onclick="switchTab('tab-founder')" id="founder-tab-nav-btn" class="tab-btn hidden py-1.5 px-3 rounded-md bg-amber-600 text-white font-semibold" data-tab="tab-founder">
-          👑 Founder Command
+          <span>🛡️ Focus Sessions</span>
         </button>
       </nav>
     </div>
@@ -278,12 +295,12 @@
       <div class="flex items-center gap-2">
         <span class="px-2 py-0.5 rounded bg-black/25 font-mono text-[10px] font-bold uppercase tracking-wider">PRO REMINDER</span>
         <p class="font-medium">
-          Free Tier Active: Unlock 100% of Module Units, Focus Jail Shield & Error Analytics.
+          Pro study plans and advanced focus tools are available to subscribed accounts.
         </p>
       </div>
       <div class="flex items-center gap-2">
-        <button onclick="switchTab('tab-pro')" class="px-3 py-1 rounded-md bg-white text-ink-900 font-bold hover:bg-amber-50 transition shadow-xs">
-          Upgrade (₹200/yr) &rarr;
+          <button onclick="switchTab('tab-pro')" class="px-3 py-1 rounded-md bg-white text-ink-900 font-bold hover:bg-amber-50 transition shadow-xs">
+          View Pro Plans &rarr;
         </button>
         <button onclick="dismissProBanner()" class="p-1 text-white/80 hover:text-white">&times;</button>
       </div>
@@ -296,8 +313,9 @@
   <section class="bg-surface dark:bg-darksurface border-b bordercol dark:border-darkborder py-3">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs">
       <div class="flex items-center gap-3">
-        <div class="w-9 h-9 rounded-full bg-ink-100 dark:bg-darkcanvas border bordercol dark:border-darkborder flex items-center justify-center font-bold text-base cursor-pointer" onclick="openModal('modal-onboarding')">
-          <span>⚡</span>
+        <div class="w-9 h-9 rounded-full bg-ink-100 dark:bg-darkcanvas border bordercol dark:border-darkborder flex items-center justify-center font-bold text-base cursor-pointer" onclick="setAuthMode('signup'); openModal('modal-login')">
+          <img id="profile-avatar-large" class="hidden h-full w-full rounded-full object-cover" alt="Profile picture">
+          <span id="profile-avatar-large-initial">⚡</span>
         </div>
         <div>
           <div class="flex items-center gap-2">
@@ -310,11 +328,12 @@
             <span>•</span>
             <span>Focus Gap: <strong id="user-weakness-text" class="text-pwred">Core Problem Areas</strong></span>
           </div>
+          <p id="account-status" aria-live="polite" class="hidden text-[11px] text-amber-700 dark:text-amber-300 mt-1"></p>
         </div>
       </div>
 
       <div class="flex items-center gap-2">
-        <button onclick="openModal('modal-ai-prescription')" class="px-3 py-1.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/30 hover:bg-emerald-100 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/40 text-xs font-mono font-medium flex items-center gap-1.5">
+        <button onclick="openStudyPlan()" class="px-3 py-1.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/30 hover:bg-emerald-100 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/40 text-xs font-mono font-medium flex items-center gap-1.5">
           <span>🧠 Recovery Routine:</span>
           <strong>Target Plan</strong>
         </button>
@@ -327,7 +346,7 @@
   <!-- ========================================== -->
   <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-1 w-full space-y-6">
 
-    <!-- TAB 1: MODULE NOTEBOOKS -->
+    <!-- TAB 1: MODULE TRACKER -->
     <div id="tab-modules" class="tab-pane space-y-6">
       <div class="bg-surface dark:bg-darksurface rounded-xl fine-border card-shadow p-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
@@ -375,7 +394,7 @@
       </div>
     </div>
 
-    <!-- TAB 2: MARKS & LINE GRAPHS -->
+    <!-- TAB 2: MARK ANALYSIS -->
     <div id="tab-marks" class="tab-pane hidden space-y-6">
       <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pt-1">
         <div>
@@ -564,29 +583,57 @@
         </form>
       </div>
 
-      <div id="active-exams-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"></div>
-
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-        <div class="lg:col-span-8 bg-surface dark:bg-darksurface rounded-xl fine-border card-shadow p-5 sm:p-6 space-y-4">
-          <div class="flex items-center justify-between">
-            <h3 id="cal-month-title" class="font-serif font-bold text-lg">Calendar</h3>
-            <div class="flex items-center gap-1.5">
-              <button onclick="changeCalMonth(-1)" class="p-1 px-2.5 text-xs rounded border bordercol dark:border-darkborder">&larr;</button>
-              <button onclick="resetCalMonth()" class="px-2.5 py-1 text-xs font-mono rounded border bordercol dark:border-darkborder">Today</button>
-              <button onclick="changeCalMonth(1)" class="p-1 px-2.5 text-xs rounded border bordercol dark:border-darkborder">&rarr;</button>
-            </div>
-          </div>
-          <div class="grid grid-cols-7 text-center font-mono text-xs text-ink-400 border-b bordercol dark:border-darkborder pb-2">
-            <div>Su</div><div>Mo</div><div>Tu</div><div>We</div><div>Th</div><div>Fr</div><div>Sa</div>
-          </div>
-          <div id="cal-days-grid" class="grid grid-cols-7 gap-1 min-h-[300px] text-xs"></div>
-        </div>
-
-        <div class="lg:col-span-4 bg-surface dark:bg-darksurface rounded-xl fine-border card-shadow p-5 space-y-3">
-          <h4 class="font-bold text-sm">Selected Date</h4>
-          <div id="cal-day-detail-box" class="min-h-[120px] p-3 rounded-lg bg-ink-100/60 dark:bg-darkcanvas text-xs space-y-2"></div>
-        </div>
+      <div class="flex gap-1 border-b bordercol dark:border-darkborder" role="tablist" aria-label="Calendar view">
+        <button id="calendar-view-year" onclick="setCalendarView('year')" role="tab" aria-selected="true" class="calendar-view-tab active">Year exam map</button>
+        <button id="calendar-view-daily" onclick="setCalendarView('daily')" role="tab" aria-selected="false" class="calendar-view-tab">Daily schedule</button>
       </div>
+
+      <section id="calendar-year-view" class="space-y-4" role="tabpanel" aria-labelledby="calendar-view-year">
+        <div class="flex items-center justify-between gap-3">
+          <div>
+            <h3 id="cal-year-title" class="font-serif text-lg font-bold">Exam year</h3>
+            <p class="text-xs text-ink-500">Your tracked exam dates across all twelve months.</p>
+          </div>
+          <select id="calendar-year-select" onchange="setCalendarYear(this.value)" class="rounded-md border bordercol dark:border-darkborder bg-surface dark:bg-darksurface px-3 py-2 text-xs font-mono"></select>
+        </div>
+        <div id="calendar-year-grid" class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3"></div>
+      </section>
+
+      <section id="calendar-daily-view" class="hidden grid gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(280px,0.8fr)]" role="tabpanel" aria-labelledby="calendar-view-daily">
+        <div class="space-y-3">
+          <div class="flex flex-wrap items-end justify-between gap-3">
+            <div>
+              <h3 class="font-serif text-lg font-bold">Daily schedule</h3>
+              <p class="text-xs text-ink-500">Free accounts: up to 4 items per day. Pro: unlimited.</p>
+            </div>
+            <label class="text-xs font-medium">Date
+              <input id="daily-schedule-date" type="date" onchange="renderDailySchedule()" class="mt-1 block rounded-md border bordercol dark:border-darkborder bg-transparent px-3 py-2 font-mono">
+            </label>
+          </div>
+          <div class="rounded-xl border bordercol dark:border-darkborder bg-surface dark:bg-darksurface p-4">
+            <p id="daily-schedule-capacity" class="mb-3 text-xs font-mono text-ink-500"></p>
+            <div id="daily-schedule-list" class="space-y-2"></div>
+          </div>
+        </div>
+        <form id="daily-schedule-form" class="h-fit space-y-3 rounded-xl border bordercol dark:border-darkborder bg-surface dark:bg-darksurface p-4">
+          <h4 class="font-bold">Add schedule</h4>
+          <label class="block text-xs font-medium">Study block
+            <input id="daily-schedule-title" maxlength="80" required placeholder="e.g. Chemistry revision" class="mt-1 w-full rounded-md border bordercol dark:border-darkborder bg-transparent px-3 py-2">
+          </label>
+          <div class="grid grid-cols-2 gap-2">
+            <label class="text-xs font-medium">Start time
+              <input id="daily-schedule-time" type="time" required class="mt-1 w-full rounded-md border bordercol dark:border-darkborder bg-transparent px-2 py-2 font-mono">
+            </label>
+            <label class="text-xs font-medium">Duration
+              <select id="daily-schedule-duration" class="mt-1 w-full rounded-md border bordercol dark:border-darkborder bg-surface dark:bg-darksurface px-2 py-2 font-mono">
+                <option value="25">25 min</option><option value="50">50 min</option><option value="90">90 min</option>
+              </select>
+            </label>
+          </div>
+          <button type="submit" class="w-full rounded-md bg-ink-900 px-3 py-2.5 text-xs font-semibold text-white dark:bg-surface dark:text-ink-900">Add to day</button>
+          <p id="daily-schedule-status" aria-live="polite" class="text-[11px] text-ink-500"></p>
+        </form>
+      </section>
     </div>
 
     <!-- TAB 4: BACKLOG -->
@@ -659,29 +706,33 @@
             <span class="px-2 py-0.5 rounded bg-indigo-500 text-white font-mono text-[10px] font-bold uppercase tracking-wider">FOCUS PROTOCOL</span>
             <span class="text-xs font-mono text-indigo-300">★ PRO FEATURE</span>
           </div>
-          <h2 class="text-2xl font-serif font-bold mt-1">Focus Shield & Screentime Jail</h2>
-          <p class="text-xs text-indigo-200">Isolate study blocks from digital distraction and dopamine traps.</p>
+          <h2 class="text-2xl font-serif font-bold mt-1">Focus Sessions</h2>
+          <p class="text-xs text-indigo-200">Run timed study blocks with optional in-app strict mode.</p>
         </div>
-        <button onclick="toggleRegainShield()" id="regain-shield-toggle-btn" class="px-5 py-2.5 rounded-xl bg-indigo-500 hover:bg-indigo-600 text-white font-bold text-xs font-mono transition shadow-lg">
-          Activate Focus Shield
+        <button onclick="openCave()" id="regain-shield-toggle-btn" class="px-5 py-2.5 rounded-xl bg-indigo-500 hover:bg-indigo-600 text-white font-bold text-xs font-mono transition shadow-lg">
+          Start Focus Session
         </button>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div class="bg-surface dark:bg-darksurface p-5 rounded-xl fine-border card-shadow space-y-2">
-          <span class="text-[10px] font-mono uppercase text-ink-500">HOURS RECLAIMED THIS WEEK</span>
-          <div class="text-3xl font-mono font-bold text-indigo-600 dark:text-indigo-400">14.5 hrs</div>
-          <p class="text-[11px] text-ink-500">Estimated ~220 extra practice numericals.</p>
+      <div class="grid grid-cols-1 gap-5 lg:grid-cols-2">
+        <div class="rounded-xl fine-border card-shadow bg-surface p-5 dark:bg-darksurface space-y-4">
+          <h3 class="text-sm font-bold">Session controls</h3>
+          <label class="flex items-start gap-3 rounded-lg border bordercol dark:border-darkborder p-3">
+            <input id="focus-strict-toggle" type="checkbox" onchange="setStrictFocusMode(this.checked)" class="mt-0.5 h-4 w-4 accent-rose-700">
+            <span><strong class="block text-xs">Strict session · Pro</strong><span class="text-[11px] text-ink-500">Disables pause and in-app exit while a timer is running.</span></span>
+          </label>
+          <div class="flex items-center justify-between gap-3 rounded-lg border bordercol dark:border-darkborder p-3">
+            <div><strong class="block text-xs">Focus soundscape</strong><span class="text-[11px] text-ink-500">Generated noise; no streamed music.</span></div>
+            <button id="focus-sound-toggle" onclick="toggleFocusSound()" class="rounded-md border bordercol dark:border-darkborder px-3 py-2 text-xs">Start sound</button>
+          </div>
         </div>
-        <div class="bg-surface dark:bg-darksurface p-5 rounded-xl fine-border card-shadow space-y-2">
-          <span class="text-[10px] font-mono uppercase text-ink-500">FOCUS STREAK</span>
-          <div class="text-3xl font-mono font-bold text-mint-700">4 Days 🔥</div>
-          <p class="text-[11px] text-ink-500">Zero non-study app distractions during work blocks.</p>
-        </div>
-        <div class="bg-surface dark:bg-darksurface p-5 rounded-xl fine-border card-shadow space-y-2">
-          <span class="text-[10px] font-mono uppercase text-ink-500">DEVICE ISOLATION</span>
-          <div class="text-3xl font-mono font-bold text-amber-600">Strict Lock</div>
-          <p class="text-[11px] text-ink-500">Notifications held until study sprint concludes.</p>
+        <div class="rounded-xl fine-border card-shadow bg-surface p-5 dark:bg-darksurface space-y-2">
+          <h3 class="text-sm font-bold">StudyArc focus time</h3>
+          <p id="focus-time-summary" class="text-lg font-mono font-bold text-rose-800 dark:text-rose-200">0 min today · 0 min this week</p>
+          <p class="text-[11px] text-ink-500">Counts completed focus blocks in this account only.</p>
+          <p class="text-xs text-ink-500">This web app cannot inspect screen time or block other apps, sites, Reels/Shorts, adult content, or operating-system notifications.</p>
+          <p class="text-xs text-ink-500">Use your device’s built-in focus controls or a separately installed blocker for system-wide protection. Strict mode applies only inside this timer.</p>
+          <p id="focus-session-status" aria-live="polite" class="text-xs font-mono text-rose-800 dark:text-rose-200"></p>
         </div>
       </div>
     </div>
@@ -710,7 +761,7 @@
           </div>
 
           <p class="text-xs text-ink-600 dark:text-ink-400 leading-relaxed">
-            Paywall percentage scales strictly by the count of <strong>Pro Subscribed Users</strong>: +5% every 1,000 Pro users (10% base up to 60% cap).
+            Feature lock starts at 10% and increases by 5 points per 1,000 active students in the last 30 days, capped at 60%.
           </p>
 
           <div class="space-y-2">
@@ -724,10 +775,10 @@
           </div>
 
           <div class="p-3 rounded-lg bg-ink-100/60 dark:bg-darkcanvas text-xs font-mono space-y-1">
-            <div>Active Pro Subscribers: <strong id="pro-tracked-users" class="text-amber-800 dark:text-amber-400">850 Subscribers</strong></div>
-            <div>Next Price Increment (+5%): <strong id="pro-next-bump">at 5,000 Pro Users</strong></div>
-            <div>Payment Escrow: <strong class="text-emerald-700 dark:text-emerald-400">Zenith Vault Protected</strong></div>
-            <div>Monthly Settlement: <strong>Automated on 1st</strong></div>
+            <div>Active Students (30 days): <strong id="pro-tracked-users" class="text-amber-800 dark:text-amber-400">0 Active Students</strong></div>
+            <div>Next Lock Increase: <strong id="pro-next-bump">at 1,000 active students</strong></div>
+            <div>Payment Processing: <strong class="text-emerald-700 dark:text-emerald-400">Secure gateway not configured</strong></div>
+            <div>Beneficiary: <strong>Fixed by server policy</strong></div>
           </div>
         </div>
 
@@ -738,16 +789,16 @@
           </div>
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <label class="p-4 rounded-xl border-2 border-emerald-600 bg-emerald-50/40 dark:bg-emerald-950/20 cursor-pointer block relative">
-              <input type="radio" name="pro-plan-type" value="once" checked onchange="updateVaultPaymentAmount('once')" class="absolute top-4 right-4">
+            <label id="plan-card-once" class="p-4 rounded-xl border bordercol dark:border-darkborder bg-surface dark:bg-darksurface cursor-pointer block relative transition-colors">
+              <input type="radio" name="pro-plan-type" value="once" checked onchange="updateVaultPlanSelection(); updateVaultPaymentAmount('once')" class="absolute top-4 right-4">
               <span class="text-[10px] font-mono uppercase px-2 py-0.5 rounded bg-emerald-700 text-white font-bold inline-block mb-1">BEST VALUE</span>
               <h4 class="text-base font-bold">Annual Full Payment</h4>
               <div class="text-2xl font-mono font-bold text-emerald-800 dark:text-emerald-400 mt-1">₹<span id="tier-price-once">200</span> <span class="text-xs font-normal text-ink-500">/ year</span></div>
               <p class="text-[11px] text-ink-500 mt-1">Single upfront payment. Saves compared to monthly installments.</p>
             </label>
 
-            <label class="p-4 rounded-xl border bordercol dark:border-darkborder bg-surface dark:bg-darksurface cursor-pointer block relative">
-              <input type="radio" name="pro-plan-type" value="monthly" onchange="updateVaultPaymentAmount('monthly')" class="absolute top-4 right-4">
+            <label id="plan-card-monthly" class="p-4 rounded-xl border bordercol dark:border-darkborder bg-surface dark:bg-darksurface cursor-pointer block relative transition-colors">
+              <input type="radio" name="pro-plan-type" value="monthly" onchange="updateVaultPlanSelection(); updateVaultPaymentAmount('monthly')" class="absolute top-4 right-4">
               <span class="text-[10px] font-mono uppercase px-2 py-0.5 rounded bg-ink-100 dark:bg-darkcanvas text-ink-700 dark:text-ink-300 font-bold inline-block mb-1">INSTALLMENT PLAN</span>
               <h4 class="text-base font-bold">Monthly Plan (1 Year)</h4>
               <div class="text-2xl font-mono font-bold mt-1">₹<span id="tier-price-monthly">25</span> <span class="text-xs font-normal text-ink-400">/ mo</span></div>
@@ -758,23 +809,24 @@
           <div class="p-4 rounded-xl border bordercol dark:border-darkborder bg-ink-100/40 dark:bg-darkcanvas space-y-3">
             <div class="flex items-center justify-between">
               <div>
-                <span class="text-[10px] font-mono uppercase text-ink-500 block">DESTINATION VAULT</span>
-                <span class="text-sm font-mono font-bold">Zenith Protected Escrow Bank #8799</span>
+                <span class="text-[10px] font-mono uppercase text-ink-500 block">UPI PAYMENT DESTINATION</span>
+                <span class="text-sm font-mono font-bold">UPI AutoPay destination</span>
               </div>
-              <span class="text-xs font-mono text-emerald-700 bg-emerald-50 dark:bg-emerald-950/40 px-2 py-0.5 rounded">🔒 Encrypted Gateway</span>
+              <span class="text-xs font-mono text-emerald-700 bg-emerald-50 dark:bg-emerald-950/40 px-2 py-0.5 rounded">8799340567@fam only</span>
             </div>
 
             <div class="pt-2 flex flex-wrap gap-2">
-              <a id="vault-pay-btn" href="#" class="flex-1 py-2 px-3 rounded-lg bg-mint-700 hover:bg-mint-800 text-white text-xs font-semibold text-center transition shadow-xs">
-                Pay ₹<span id="pay-btn-amt">200</span> into Escrow Vault (UPI / GPay / PhonePe)
-              </a>
-              <button onclick="simulateCustomerPaymentSuccess()" class="px-3 py-2 rounded-lg border bordercol dark:border-darkborder text-xs font-mono hover:bg-surface">
-                Verify Transaction
+              <button id="vault-pay-btn" type="button" onclick="startPaymentCheckout()" disabled class="flex-1 py-2 px-3 rounded-lg bg-ink-400 text-white text-xs font-semibold text-center cursor-not-allowed">
+                Checkout unavailable
+              </button>
+                <button onclick="showPaymentVerificationStatus()" class="px-3 py-2 rounded-lg border bordercol dark:border-darkborder text-xs font-mono hover:bg-surface">
+                  Payment Status
               </button>
             </div>
-            <p class="text-[10px] text-ink-400 text-center font-mono">
-              Payments deposit directly into the Zenith Escrow Bank. All funds settle automatically on the 1st of every month.
+              <p class="text-[10px] text-ink-400 text-center font-mono">
+                AutoPay stays disabled until the gateway mandate and server-side verification are configured for this beneficiary.
             </p>
+              <p id="vault-payment-status" aria-live="polite" class="text-[10px] text-amber-700 dark:text-amber-300 text-center"></p>
           </div>
         </div>
       </div>
@@ -785,8 +837,8 @@
       <div class="bg-gradient-to-r from-ink-900 via-ink-800 to-ink-900 text-white rounded-xl p-6 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <span class="px-2 py-0.5 rounded bg-amber-400 text-ink-900 font-mono text-[10px] font-bold uppercase tracking-wider">FOUNDER EXCLUSIVE DESK</span>
-          <h2 class="text-2xl font-serif font-bold mt-1">Founder Command & Piggy Bank Vault</h2>
-          <p class="text-xs text-ink-300">Authenticated owner: Tirth Solanki. Manage subscriber scale, view private UPI payouts, and broadcast notes.</p>
+          <h2 class="text-2xl font-serif font-bold mt-1">Founder Command Center</h2>
+          <p class="text-xs text-ink-300">Owner access is granted only to the provisioned Google account. Payment destination changes require server-side approval.</p>
         </div>
         <a href="https://www.instagram.com/preg.tirth.nant?srtk=MXBxbnd4cmxoemZ2aA==" target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white text-xs font-mono">
           Instagram: @preg.tirth.nant
@@ -794,44 +846,49 @@
       </div>
 
       <div class="bg-surface dark:bg-darksurface rounded-xl fine-border card-shadow p-5 space-y-3">
-        <h4 class="font-bold text-sm">Adjust Pro Subscriber Scale</h4>
-        <div class="flex items-center gap-3">
-          <input type="number" id="fnd-pro-users-input" value="850" min="0" step="250" class="w-36 px-3 py-1.5 rounded border bordercol dark:border-darkborder bg-transparent font-mono text-xs">
-          <button onclick="updateFounderProUsersCount()" class="px-3.5 py-1.5 rounded bg-ink-900 dark:bg-surface text-surface dark:text-ink-900 text-xs font-medium">
-            Update Subscribers & Recalibrate Pricing
-          </button>
-          <span class="text-xs text-ink-500 font-mono">Drives the +5% lock (per 1,000) and +5% price (per 5,000) algorithms.</span>
+        <h4 class="font-bold text-sm">Usage-Based Feature Lock</h4>
+        <p class="text-xs text-ink-500">The lock starts at 10% and increases by 5 points per 1,000 active students in the last 30 days, capped at 60%.</p>
+        <p class="text-xs font-mono">Active students: <strong id="founder-active-students">0</strong></p>
+      </div>
+
+      <div class="bg-surface dark:bg-darksurface rounded-xl fine-border card-shadow p-5 space-y-3">
+        <h4 class="font-bold text-sm">Friend Pro Access</h4>
+        <p class="text-xs text-ink-500">Grant or revoke Pro by email. This changes entitlement only; their study records stay private.</p>
+        <div class="flex flex-col gap-2 sm:flex-row">
+          <input id="friend-pro-email" type="email" autocomplete="off" placeholder="Friend's account email" class="min-w-0 flex-1 rounded border bordercol dark:border-darkborder bg-transparent px-3 py-2 text-xs">
+          <button onclick="manageProWhitelist('grant')" class="rounded bg-ink-900 px-3 py-2 text-xs font-medium text-white dark:bg-surface dark:text-ink-900">Grant Pro</button>
+          <button onclick="manageProWhitelist('revoke')" class="rounded border bordercol px-3 py-2 text-xs font-medium">Revoke</button>
         </div>
+        <p id="friend-pro-status" aria-live="polite" class="text-[11px] text-ink-500"></p>
+      </div>
+
+      <div class="bg-surface dark:bg-darksurface rounded-xl fine-border card-shadow p-5 space-y-3">
+        <h4 class="font-bold text-sm">Request Payment Destination Review</h4>
+        <p class="text-xs text-ink-500">Requests email the owner for approval. This does not change the fixed active beneficiary: 8799340567@fam.</p>
+        <div class="flex flex-col sm:flex-row gap-2">
+          <input id="payment-change-upi" maxlength="128" autocomplete="off" placeholder="Requested UPI ID" class="min-w-0 flex-1 px-3 py-2 rounded border bordercol dark:border-darkborder bg-transparent text-xs">
+          <button onclick="requestPaymentDestinationChange()" class="px-3 py-2 rounded bg-ink-900 dark:bg-surface text-surface dark:text-ink-900 text-xs font-medium">Email Owner</button>
+        </div>
+        <p id="payment-change-status" aria-live="polite" class="text-[11px] text-ink-500"></p>
       </div>
 
       <div class="bg-surface dark:bg-darksurface rounded-xl fine-border card-shadow p-6 space-y-4">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b bordercol dark:border-darkborder pb-3">
           <div>
-            <span class="text-[10px] font-mono uppercase tracking-wider text-emerald-700 dark:text-emerald-400 font-bold">AUTOMATED PIGGY BANK DISBURSEMENT</span>
-            <h3 class="text-lg font-serif font-bold">Settlement Vault Ledger</h3>
-            <p class="text-xs text-ink-500">Student subscriptions accumulate in the escrow bank and automatically disburse on the 1st of every month.</p>
+            <span class="text-[10px] font-mono uppercase tracking-wider text-emerald-700 dark:text-emerald-400 font-bold">PAYMENT INTEGRATION STATUS</span>
+            <h3 class="text-lg font-serif font-bold">Payment Provider Setup</h3>
+            <p class="text-xs text-ink-500">This static app has no escrow, payment verification, or automatic payouts. Connect a trusted provider and server before accepting subscriptions.</p>
           </div>
           <div class="text-right">
-            <span class="text-[10px] font-mono text-ink-400 block">SETTLEMENT DESTINATION (PRIVATE)</span>
-            <strong id="founder-vault-private-upi" class="font-mono text-sm text-emerald-700 dark:text-emerald-400">Hidden from Public</strong>
+            <span class="text-[10px] font-mono text-ink-400 block">UPI DESTINATION</span>
+            <strong id="founder-vault-private-upi" class="font-mono text-sm text-emerald-700 dark:text-emerald-400">8799340567@fam (fixed)</strong>
           </div>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <div class="p-4 rounded-xl bg-canvas dark:bg-darkcanvas border bordercol dark:border-darkborder">
-            <span class="text-[10px] font-mono uppercase text-ink-500 block">Current Vault Piggy Bank</span>
-            <div id="vault-escrow-balance" class="text-2xl font-mono font-bold text-emerald-700 dark:text-emerald-400 mt-1">₹48,200</div>
-            <span class="text-[11px] text-ink-500">Accumulated this cycle</span>
-          </div>
-          <div class="p-4 rounded-xl bg-canvas dark:bg-darkcanvas border bordercol dark:border-darkborder">
-            <span class="text-[10px] font-mono uppercase text-ink-500 block">Next Auto-Payout Trigger</span>
-            <div class="text-2xl font-mono font-bold mt-1">1st of Next Month</div>
-            <span class="text-[11px] text-ink-500">Automated UPI wire to Founder</span>
-          </div>
-          <div class="p-4 rounded-xl bg-canvas dark:bg-darkcanvas border bordercol dark:border-darkborder">
-            <span class="text-[10px] font-mono uppercase text-ink-500 block">Lifetime Disbursed</span>
-            <div class="text-2xl font-mono font-bold mt-1">₹1,94,400</div>
-            <span class="text-[11px] text-ink-500">Completed disbursements</span>
+          <div class="p-4 rounded-xl bg-canvas dark:bg-darkcanvas border bordercol dark:border-darkborder sm:col-span-3">
+            <span class="text-[10px] font-mono uppercase text-ink-500 block">LIVE BALANCE</span>
+            <p class="text-sm font-mono font-bold mt-1">Unavailable: no payment transactions are connected.</p>
           </div>
         </div>
 
@@ -849,25 +906,106 @@
 
   <!-- Modal: Sign In -->
   <div id="modal-login" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] items-center justify-center p-4 hidden" style="display: none;">
-    <div class="bg-surface dark:bg-darksurface rounded-2xl fine-border card-shadow max-w-sm w-full p-6 space-y-4 text-xs">
+    <div class="relative max-h-[90vh] w-full max-w-md overflow-y-auto bg-surface dark:bg-darksurface rounded-2xl fine-border card-shadow p-6 space-y-4 text-xs">
+      <button onclick="closeModal('modal-login')" aria-label="Close sign-in dialog" class="absolute right-4 top-3 text-ink-400 hover:text-ink-900 dark:hover:text-surface text-lg">&times;</button>
       <div class="text-center space-y-1">
-        <h3 class="font-serif font-bold text-lg">Sign In to ZENITH OS</h3>
-        <p class="text-ink-500 text-[11px]">Choose your authentication identity</p>
+        <h3 class="font-serif font-bold text-lg">Log in to StudyArc</h3>
+        <p class="text-ink-500 text-[11px]">Choose how to continue</p>
       </div>
 
-      <div class="space-y-2 pt-2">
-        <button onclick="authenticateUser('tirthsolanki.founder@gmail.com')" class="w-full py-2.5 px-3 rounded-xl border border-amber-300 dark:border-amber-800 bg-amber-50 dark:bg-amber-950/30 hover:bg-amber-100 transition flex items-center justify-center gap-2 font-bold text-amber-900 dark:text-amber-200">
-          <span>👑 Founder Access (Tirth Solanki)</span>
-        </button>
-
-        <button onclick="authenticateUser('candidate@zenith.os')" class="w-full py-2.5 px-3 rounded-xl border bordercol dark:border-darkborder hover:bg-ink-100 dark:hover:bg-darkcanvas transition flex items-center justify-center gap-2 font-medium">
-          <span>Candidate Account (Google)</span>
-        </button>
+      <div class="grid grid-cols-2 gap-2 border-b bordercol dark:border-darkborder" role="tablist" aria-label="Account access">
+        <button id="auth-tab-signin" role="tab" aria-selected="true" onclick="setAuthMode('signin')" class="py-2 border-b-2 border-mint-700 font-semibold">Log In</button>
+        <button id="auth-tab-signup" role="tab" aria-selected="false" onclick="setAuthMode('signup')" class="py-2 border-b-2 border-transparent text-ink-500">Sign Up</button>
       </div>
 
-      <div class="pt-2 text-center border-t bordercol dark:border-darkborder">
-        <button onclick="closeModal('modal-login'); startOnboardingWizard();" class="text-mint-700 hover:underline">New Candidate? Create Profile &rarr;</button>
+      <div id="auth-signin-panel" role="tabpanel" aria-labelledby="auth-tab-signin" class="space-y-2 pt-1">
+        <form id="email-signin-form" class="space-y-2" onsubmit="signInWithPassword(event)">
+          <input id="signin-email" type="email" required autocomplete="email" placeholder="Email address" class="w-full rounded-md border bordercol dark:border-darkborder bg-transparent px-3 py-2">
+          <input id="signin-password" type="password" required autocomplete="current-password" placeholder="Password" class="w-full rounded-md border bordercol dark:border-darkborder bg-transparent px-3 py-2">
+          <button type="submit" class="w-full rounded-lg bg-ink-900 px-3 py-2.5 font-semibold text-white dark:bg-surface dark:text-ink-900">Log In</button>
+        </form>
+        <div class="text-center text-[10px] font-mono text-ink-400">OR CONTINUE WITH</div>
+        <button onclick="startAuthProvider('google')" class="w-full py-2.5 px-3 rounded-xl border bordercol dark:border-darkborder hover:bg-ink-100 dark:hover:bg-darkcanvas transition font-medium">Continue with Google</button>
+        <button onclick="startAuthProvider('apple')" class="w-full py-2.5 px-3 rounded-xl border bordercol dark:border-darkborder hover:bg-ink-100 dark:hover:bg-darkcanvas transition font-medium">Continue with Apple</button>
       </div>
+
+      <div id="auth-signup-panel" role="tabpanel" aria-labelledby="auth-tab-signup" class="space-y-2 pt-1 hidden">
+        <p class="text-ink-500 text-[11px]">Create an account to sync your study records securely.</p>
+        <p class="text-[10px] text-ink-400">Module progress, test marks, and your study target are stored in your account. Daily active usage is counted for feature access.</p>
+        <form id="email-signup-form" class="space-y-2" onsubmit="signUpWithPassword(event)">
+          <input id="signup-real-name" type="text" required maxlength="100" autocomplete="name" placeholder="Real name" class="w-full rounded-md border bordercol dark:border-darkborder bg-transparent px-3 py-2">
+          <input id="signup-username" type="text" maxlength="24" autocomplete="username" placeholder="Username (optional)" class="w-full rounded-md border bordercol dark:border-darkborder bg-transparent px-3 py-2">
+          <select id="signup-study-stage" class="w-full rounded-md border bordercol dark:border-darkborder bg-surface dark:bg-darksurface px-3 py-2">
+            <option>Class 10</option><option>Class 11</option><option selected>Class 12</option><option>Drop year</option><option>University / 12+</option><option>Other</option>
+          </select>
+          <input id="signup-email" type="email" required autocomplete="email" placeholder="Email address" class="w-full rounded-md border bordercol dark:border-darkborder bg-transparent px-3 py-2">
+          <input id="signup-password" type="password" required minlength="8" autocomplete="new-password" placeholder="Password (8+ characters)" class="w-full rounded-md border bordercol dark:border-darkborder bg-transparent px-3 py-2">
+          <label class="flex items-start gap-2 py-1 text-[10px] text-ink-500">
+            <input id="terms-consent" type="checkbox" required class="mt-0.5">
+            <span>I agree to the <button type="button" onclick="openModal('modal-terms')" class="font-semibold underline">Terms and Conditions</button> and the account data notice above.</span>
+          </label>
+          <button type="submit" class="w-full rounded-lg bg-ink-900 px-3 py-2.5 font-semibold text-white dark:bg-surface dark:text-ink-900">Create Account</button>
+        </form>
+        <div class="text-center text-[10px] font-mono text-ink-400">OR SIGN UP WITH</div>
+        <button onclick="startAuthProvider('google')" class="w-full py-2.5 px-3 rounded-xl border bordercol dark:border-darkborder hover:bg-ink-100 dark:hover:bg-darkcanvas transition font-medium">Sign up with Google</button>
+        <button onclick="startAuthProvider('apple')" class="w-full py-2.5 px-3 rounded-xl border bordercol dark:border-darkborder hover:bg-ink-100 dark:hover:bg-darkcanvas transition font-medium">Sign up with Apple</button>
+      </div>
+      <p id="auth-provider-notice" aria-live="polite" class="min-h-8 text-[11px] text-ink-500"></p>
+    </div>
+  </div>
+
+  <div id="modal-google-onboarding" class="fixed inset-0 z-[105] hidden items-center justify-center bg-black/60 p-4" style="display:none">
+    <div class="relative w-full max-w-md space-y-4 rounded-xl fine-border bg-surface p-6 dark:bg-darksurface">
+      <div class="flex items-center justify-between border-b bordercol pb-3 dark:border-darkborder">
+        <div><span id="google-onboarding-step-label" class="font-mono text-[10px] uppercase text-sky-800 dark:text-sky-200">PROFILE · 1 OF 2</span><h3 class="mt-1 font-serif text-lg font-bold">Make StudyArc yours</h3></div>
+        <button onclick="logOutToLanding()" aria-label="Cancel profile setup" class="text-xl text-ink-400">&times;</button>
+      </div>
+      <p class="text-xs text-ink-500">A quick setup helps us personalize your workspace. You can edit this later in Profile settings.</p>
+      <div id="google-onboarding-step-1" class="space-y-3">
+        <label class="block text-xs font-medium">Real name<input id="google-onboarding-name" required maxlength="100" autocomplete="name" class="mt-1 w-full rounded-md border bordercol dark:border-darkborder bg-transparent px-3 py-2"></label>
+        <label class="block text-xs font-medium">Username <span class="font-normal text-ink-500">(optional)</span><input id="google-onboarding-username" maxlength="24" pattern="[A-Za-z0-9_]{3,24}" placeholder="3-24 letters, numbers, or _" class="mt-1 w-full rounded-md border bordercol dark:border-darkborder bg-transparent px-3 py-2"></label>
+        <button onclick="advanceGoogleOnboarding()" class="w-full rounded-md bg-ink-900 px-3 py-2.5 text-xs font-semibold text-white dark:bg-surface dark:text-ink-900">Continue</button>
+      </div>
+      <div id="google-onboarding-step-2" class="hidden space-y-3">
+        <label class="block text-xs font-medium">Study stage<select id="google-onboarding-stage" class="mt-1 w-full rounded-md border bordercol dark:border-darkborder bg-surface px-3 py-2 dark:bg-darksurface"><option>Class 10</option><option>Class 11</option><option>Class 12</option><option>Drop year</option><option>University / 12+</option><option>Other</option></select></label>
+        <label class="block text-xs font-medium">What are you working toward?<input id="google-onboarding-goal" maxlength="120" placeholder="Your target (optional)" class="mt-1 w-full rounded-md border bordercol dark:border-darkborder bg-transparent px-3 py-2"></label>
+        <label class="block text-xs font-medium">What would you like to improve?<input id="google-onboarding-weakness" maxlength="120" placeholder="Your focus area (optional)" class="mt-1 w-full rounded-md border bordercol dark:border-darkborder bg-transparent px-3 py-2"></label>
+        <div class="flex gap-2"><button onclick="setGoogleOnboardingStep(1)" class="flex-1 rounded-md border bordercol px-3 py-2.5 text-xs font-semibold dark:border-darkborder">Back</button><button onclick="finishGoogleOnboarding()" class="flex-1 rounded-md bg-ink-900 px-3 py-2.5 text-xs font-semibold text-white dark:bg-surface dark:text-ink-900">Finish setup</button></div>
+      </div>
+      <p id="google-onboarding-status" aria-live="polite" class="text-xs text-ink-500"></p>
+    </div>
+  </div>
+
+  <div id="modal-profile-settings" class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/60 p-4" style="display:none">
+    <div class="relative max-h-[90vh] w-full max-w-md space-y-4 overflow-y-auto rounded-xl fine-border bg-surface p-5 dark:bg-darksurface">
+      <button onclick="closeModal('modal-profile-settings')" aria-label="Close profile settings" class="absolute right-4 top-3 text-xl text-ink-400">&times;</button>
+      <div><h3 class="font-serif text-lg font-bold">Profile settings</h3><p class="text-xs text-ink-500">Your real name is used across your study account. Username is optional.</p></div>
+      <form id="profile-settings-form" class="space-y-3" onsubmit="saveProfileSettings(event)">
+        <label class="block text-xs font-medium">Profile picture<input id="profile-picture-input" type="file" accept="image/png,image/jpeg,image/webp" class="mt-1 block w-full text-xs"></label>
+        <label class="block text-xs font-medium">Real name<input id="profile-real-name" required maxlength="100" class="mt-1 w-full rounded-md border bordercol dark:border-darkborder bg-transparent px-3 py-2"></label>
+        <label class="block text-xs font-medium">Username (optional)<input id="profile-username-input" maxlength="24" pattern="[A-Za-z0-9_]{3,24}" placeholder="3-24 letters, numbers, or _" class="mt-1 w-full rounded-md border bordercol dark:border-darkborder bg-transparent px-3 py-2"></label>
+        <label class="block text-xs font-medium">Study stage<select id="profile-study-stage" class="mt-1 w-full rounded-md border bordercol dark:border-darkborder bg-surface px-3 py-2 dark:bg-darksurface"><option>Class 10</option><option>Class 11</option><option>Class 12</option><option>Drop year</option><option>University / 12+</option><option>Other</option></select></label>
+        <label class="block text-xs font-medium">Theme<select id="profile-theme" class="mt-1 w-full rounded-md border bordercol dark:border-darkborder bg-surface px-3 py-2 dark:bg-darksurface"><option value="rose">Rose · included</option><option value="mint">Mint · Pro</option><option value="twilight">Twilight · Pro</option></select></label>
+        <label class="block text-xs font-medium">Study goal<input id="profile-study-goal" maxlength="120" class="mt-1 w-full rounded-md border bordercol dark:border-darkborder bg-transparent px-3 py-2"></label>
+        <label class="block text-xs font-medium">Focus gap<input id="profile-weakness" maxlength="120" class="mt-1 w-full rounded-md border bordercol dark:border-darkborder bg-transparent px-3 py-2"></label>
+        <button type="submit" class="w-full rounded-md bg-ink-900 px-3 py-2.5 text-xs font-semibold text-white dark:bg-surface dark:text-ink-900">Save profile</button>
+      </form>
+      <p id="profile-settings-status" aria-live="polite" class="text-xs text-ink-500"></p>
+    </div>
+  </div>
+
+  <div id="modal-terms" class="fixed inset-0 z-[110] hidden items-center justify-center bg-black/60 p-4" style="display:none">
+    <div class="relative max-h-[85vh] w-full max-w-lg space-y-4 overflow-y-auto rounded-xl fine-border bg-surface p-6 dark:bg-darksurface">
+      <button onclick="closeModal('modal-terms')" aria-label="Close terms" class="absolute right-4 top-3 text-xl text-ink-400">&times;</button>
+      <h3 class="font-serif text-lg font-bold">Terms and Conditions</h3>
+      <div class="space-y-3 text-xs leading-relaxed text-ink-600 dark:text-ink-300">
+        <p>StudyArc is a study-planning tool, not a tutoring, medical, or emergency service. Study plans and focus suggestions are organizational aids and do not guarantee academic results.</p>
+        <p>Your account stores your real name, optional username and profile picture, study stage, goals, module progress, test marks, calendar schedules, and daily active-use events. Students can access only their own records. The owner account does not receive student study records.</p>
+        <p>Do not enter sensitive personal information. You are responsible for keeping your account credentials private. Account access and data deletion depend on the configured authentication/database provider.</p>
+        <p>Payment and AutoPay are unavailable until a trusted payment provider is configured. No charge is made by this app. Any future recurring payment requires your explicit provider mandate.</p>
+        <p>Browser-only focus mode cannot block other apps, websites, or operating-system notifications. Use device-level controls or a separately installed blocker for that protection.</p>
+      </div>
+      <button onclick="closeModal('modal-terms')" class="w-full rounded-md bg-ink-900 px-3 py-2 text-xs font-semibold text-white dark:bg-surface dark:text-ink-900">Close terms</button>
     </div>
   </div>
 
@@ -1018,26 +1156,19 @@
         <button onclick="closeModal('modal-ai-prescription')" class="text-ink-400 text-base">&times;</button>
       </div>
 
-      <div class="p-4 rounded-xl bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800 space-y-2">
-        <div class="text-emerald-900 dark:text-emerald-200 font-bold text-sm">Target Potential: +28 Marks</div>
-        <p class="text-emerald-800 dark:text-emerald-300 leading-relaxed text-[11px]">
-          Configured to eliminate negative marks and resolve weak chapter blocks.
-        </p>
+      <div class="space-y-2">
+        <label for="study-plan-goal" class="block font-medium">Your goal</label>
+        <div class="flex gap-2">
+          <input id="study-plan-goal" maxlength="120" class="min-w-0 flex-1 px-3 py-2 rounded border bordercol dark:border-darkborder bg-transparent" placeholder="What are you working toward?">
+          <button onclick="saveStudyPlanGoal()" class="px-3 py-2 rounded bg-ink-900 dark:bg-surface text-surface dark:text-ink-900 font-medium">Save</button>
+        </div>
+        <p class="text-[11px] text-ink-500">Your plan uses your goal, module progress, and recent test accuracy.</p>
       </div>
 
-      <div class="space-y-2">
-        <div class="p-2.5 rounded border bordercol dark:border-darkborder flex items-start gap-2">
-          <span class="font-bold text-mint-700">1.</span>
-          <div><strong>10-Second Calculation Verification (+15 Marks):</strong> Force a sanity check on all integer calculation steps.</div>
-        </div>
-        <div class="p-2.5 rounded border bordercol dark:border-darkborder flex items-start gap-2">
-          <span class="font-bold text-mint-700">2.</span>
-          <div><strong>Core Quota Drill (+8 Marks):</strong> Complete 25 standard exam problems in your weak chapters.</div>
-        </div>
-      </div>
+      <ol id="study-plan-items" class="space-y-2 text-xs"></ol>
 
       <button onclick="closeModal('modal-ai-prescription')" class="w-full py-2 rounded bg-ink-900 dark:bg-surface text-surface dark:text-ink-900 font-medium">
-        Apply Routine
+        Done
       </button>
     </div>
   </div>
@@ -1059,18 +1190,19 @@
       <div id="cave-3min-alert" class="hidden px-4 py-1.5 rounded-full bg-rose-900/70 border border-rose-500/60 text-rose-200 text-xs font-mono pulse-danger">
         ⚠️ 3-Minute Warning: Cut losses or mark for review to avoid score drain.
       </div>
+      <div id="cave-phase-label" class="text-[11px] font-mono uppercase tracking-widest text-rose-200">Focus block</div>
       <div id="cave-clock" class="text-7xl sm:text-9xl font-mono font-bold tracking-tight select-none">25:00</div>
       <div class="flex items-center gap-3">
         <button id="cave-timer-btn" onclick="toggleTimer()" class="px-7 py-2.5 rounded-lg bg-mint-700 hover:bg-mint-600 text-white font-semibold text-xs tracking-wide">
           Start Focus
         </button>
-        <button onclick="resetTimer()" class="px-4 py-2.5 rounded-lg bg-white/10 hover:bg-white/20 text-white text-xs font-mono">Reset</button>
+        <button id="cave-reset-btn" onclick="resetTimer()" class="px-4 py-2.5 rounded-lg bg-white/10 hover:bg-white/20 text-white text-xs font-mono">Reset</button>
       </div>
 
       <div class="flex flex-wrap items-center justify-center gap-2 text-xs font-mono pt-2">
-        <button onclick="setTimerDuration(25)" class="px-3 py-1 rounded bg-white/10 hover:bg-white/20">25m Pomodoro</button>
-        <button onclick="setTimerDuration(50)" class="px-3 py-1 rounded bg-white/10 hover:bg-white/20">50m Deep</button>
-        <button onclick="setTimerDuration(90)" class="px-3 py-1 rounded bg-white/10 hover:bg-white/20">90m Sprint</button>
+        <button onclick="setTimerDuration(25)" class="cave-duration-btn px-3 py-1 rounded bg-white/10 hover:bg-white/20">25m Pomodoro</button>
+        <button onclick="setTimerDuration(50)" class="cave-duration-btn px-3 py-1 rounded bg-white/10 hover:bg-white/20">50m Deep</button>
+        <button onclick="setTimerDuration(90)" class="cave-duration-btn px-3 py-1 rounded bg-white/10 hover:bg-white/20">90m Sprint</button>
       </div>
     </div>
 
@@ -1091,10 +1223,11 @@
   <!-- ========================================== -->
   <script src="js/config.js"></script>
   <script src="js/state.js"></script>
+  <script src="js/supabase.js"></script>
   <script src="js/vault.js"></script>
   <script src="js/modules.js"></script>
   <script src="js/analytics.js"></script>
-  <script src="js/calendar.js"></script>
+  <script src="js/calender.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>

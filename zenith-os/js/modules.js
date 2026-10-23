@@ -1,6 +1,6 @@
 /* =======================================================
    MULTIPLE MODULE NOTEBOOKS & TRANSIENT PRACTICE UNITS
-   Train Ur Brain (#2): 0 EXP, NEVER saved in localStorage.
+  Train Ur Brain (#2): 0 EXP, never synced to the account database.
    ======================================================= */
 
 function getActiveNotebook() {
@@ -131,6 +131,45 @@ function renderNotebookOverview() {
       </div>
     `;
   }).join('');
+}
+
+function renderBacklog() {
+  const blockersContainer = document.getElementById('blockers-backlog-container');
+  const independentContainer = document.getElementById('independent-backlog-container');
+  if (!blockersContainer || !independentContainer) return;
+
+  const chapters = state.notebooks.flatMap(notebook =>
+    (notebook.chapters || []).map(chapter => ({ ...chapter, notebookName: notebook.name }))
+  );
+
+  const renderChapter = chapter => {
+    const sections = state.customSections.filter(section => section.id !== 'train_brain');
+    const solved = sections.reduce((total, section) =>
+      total + (chapter.sectionsData?.[section.id]?.solved || 0), 0
+    );
+    const target = sections.reduce((total, section) =>
+      total + (chapter.sectionsData?.[section.id]?.limit ?? section.defaultLimit ?? 0), 0
+    );
+
+    return `
+      <div class="flex items-center justify-between gap-3 p-2.5 rounded border bordercol dark:border-darkborder">
+        <div class="min-w-0">
+          <strong class="block truncate">${escapeHtml(chapter.name)}</strong>
+          <span class="text-[10px] text-ink-500">${escapeHtml(chapter.notebookName)}</span>
+        </div>
+        <span class="shrink-0 font-mono text-[11px]">${solved}/${target}</span>
+      </div>
+    `;
+  };
+
+  const blockers = chapters.filter(chapter => chapter.isBlocker);
+  const independent = chapters.filter(chapter => !chapter.isBlocker);
+  blockersContainer.innerHTML = blockers.length
+    ? blockers.map(renderChapter).join('')
+    : '<p class="text-ink-400">No prerequisite blockers.</p>';
+  independentContainer.innerHTML = independent.length
+    ? independent.map(renderChapter).join('')
+    : '<p class="text-ink-400">No independent units yet.</p>';
 }
 
 function updateSectionCount(chapId, secId, field, val) {

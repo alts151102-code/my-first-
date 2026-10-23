@@ -1,18 +1,17 @@
 /* =======================================================
    CENTRAL STATE PERSISTENCE & TRANSIENT STORAGE
    ======================================================= */
-const STORAGE_KEY = 'ZENITH_STORAGE_V12';
-
-// Temporary runtime memory for Train Ur Brain (never saved in localStorage)
+// Temporary runtime memory for Train Ur Brain (never synced to the account database)
 let sessionTransientBrainData = {};
 
 const defaultState = {
   isLoggedIn: false,
   userEmail: '',
+  authUserId: null,
   isFounderUser: false,
   isDarkMode: false,
   dashboardView: 'student',
-  proCustomerCount: 850,
+  activeStudentCount: 0,
   user: {
     name: 'Candidate',
     age: 17,
@@ -21,9 +20,15 @@ const defaultState = {
     weakness: 'Calculation Speed',
     exp: 0,
     level: 1,
-    isPro: false
+    isPro: false,
+    username: '',
+    avatarPath: '',
+    avatarUrl: ''
   },
   regainShieldActive: false,
+  focusStrictMode: false,
+  theme: 'rose',
+  focusSessions: [],
   feedbacks: [],
   customSections: [...APP_CONFIG.DEFAULT_SECTIONS],
   activeNotebookId: null,
@@ -33,6 +38,8 @@ const defaultState = {
   trackedExams: [
     { id: 'ex-1', name: 'Target Exam Mock #1', date: '2026-01-23', color: '#0B7A53' }
   ],
+  calendarYear: new Date().getFullYear(),
+  dailySchedules: [],
   gatekeeper: { notesRevised: false, dppCompleted: false },
   calendarEvents: {}
 };
@@ -40,26 +47,12 @@ const defaultState = {
 let state = loadState();
 
 function loadState() {
-  const stored = localStorage.getItem(STORAGE_KEY);
-  if (!stored) return defaultState;
-  try { return { ...defaultState, ...JSON.parse(stored) }; }
-  catch (e) { return defaultState; }
+  return JSON.parse(JSON.stringify(defaultState));
 }
 
 function saveState() {
-  try {
-    const copy = JSON.parse(JSON.stringify(state));
-    // Completely strips transient Train Ur Brain from persistent local storage
-    copy.notebooks.forEach(nb => {
-      if (nb.chapters) {
-        nb.chapters.forEach(chap => {
-          if (chap.sectionsData && chap.sectionsData['train_brain']) {
-            delete chap.sectionsData['train_brain'];
-          }
-        });
-      }
-    });
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(copy));
-  } catch (e) { console.warn('Storage failed', e); }
+  if (state.authUserId && typeof persistAccountState === 'function') {
+    persistAccountState().catch(error => showAccountStatus(error.message));
+  }
   renderAll();
 }

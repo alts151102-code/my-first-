@@ -2,21 +2,19 @@
    CENTRAL APP CONFIGURATION
    ======================================================= */
 const APP_CONFIG = {
-  APP_NAME: 'ZENITH OS',
+  APP_NAME: 'StudyArc',
   FOUNDER_NAME: 'Tirth Solanki',
   FOUNDER_AGE: 15,
-  FOUNDER_GOOGLE_EMAIL: 'alt.s151102@gmail',
+  FOUNDER_GOOGLE_EMAIL: 'alt.s151102@gmail.com',
   INSTAGRAM_URL: 'https://www.instagram.com/preg.tirth.nant?srtk=MXBxbnd4cmxoemZ2aA==',
-  
-  // HIDDEN VAULT ESCROW TARGET (Never exposed in public UI)
-  PRIVATE_VAULT_UPI_ID: '8799340567@fam',
+  SUPABASE_URL: '',
+  SUPABASE_ANON_KEY: '',
+  PAYMENT_CHECKOUT_ENDPOINT: '',
 
   BASE_PRICE_ONCE: 200,            // ₹200 / year paid once
   BASE_PRICE_MONTHLY_ANNUAL: 300,  // ₹300 / year total in monthly installments
-  PRO_PRICE_BUMP_INTERVAL: 5000,   // +5% price bump every 5,000 PRO users
-  PRO_PRICE_BUMP_RATE: 0.05,
   BASE_LOCK_PCT: 10,               // 10% base lock
-  PRO_LOCK_INTERVAL: 1000,         // +5% lock every 1,000 PRO users
+  PRO_LOCK_INTERVAL: 1000,         // +5% lock every 1,000 active students
   PRO_LOCK_GROWTH: 5,
   MAX_LOCK_PCT: 60,                // 60% lock cap
 
